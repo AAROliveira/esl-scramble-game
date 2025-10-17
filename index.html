@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Word Scramble Challenge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="game-container">
+        <h1>ESL Word Scramble</h1>
+        <div class="score-timer">
+            <p>Score: <span id="score">0</span></p>
+            <p>Time: <span id="time">60</span>s</p>
+        </div>
+        <div class="word-display">
+            <p id="scrambled-word">Loading...</p>
+        </div>
+        <input type="text" id="user-input" placeholder="Your answer here..." autocomplete="off">
+        <div class="buttons">
+            <button id="check-btn">Check Answer</button>
+            <button id="next-btn">Next Word</button>
+            <button id="start-btn" class="start-button">Start Game</button>
+        </div>
+        <div class="lifelines">
+            <button id="lifeline-answer" class="lifeline" title="Reveal the answer (costs 1)">
+                <!-- SVG icon: lightbulb -->
+                <svg class="icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path fill="currentColor" d="M9 21h6v-1H9v1zm3-20a7 7 0 00-4 12v3h8v-3a7 7 0 00-4-12z" />
+                </svg>
+                <span class="label">Gimme Answer (<span id="count-answer">2</span>)</span>
+            </button>
+
+            <button id="lifeline-time" class="lifeline" title="Add 20 seconds to the timer (costs 1)">
+                <!-- SVG icon: clock -->
+                <svg class="icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path fill="currentColor" d="M12 1a11 11 0 110 22A11 11 0 0112 1zm1 11h4v-2h-3V6h-2v6z" />
+                </svg>
+                <span class="label">Buy More Time (+20s) (<span id="count-time">3</span>)</span>
+            </button>
+
+            <button id="lifeline-break" class="lifeline" title="Reduce scrambling for the current word (costs 1)">
+                <!-- SVG icon: shield/pep -->
+                <svg class="icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path fill="currentColor" d="M12 2l7 3v5c0 5-3.8 9.7-7 11-3.2-1.3-7-6-7-11V5l7-3z" />
+                </svg>
+                <span class="label">Gimme a Break (<span id="count-break">2</span>)</span>
+            </button>
+
+            <p class="lifeline-help">Lifelines left: <span id="lifelines-total">7</span></p>
+        </div>
+        <p id="feedback"></p>
+    </div>
+
+    <!-- Confirmation modal used in place of browser confirm() -->
+    <div id="confirm-modal" class="modal hidden" aria-hidden="true">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+            <h3 id="confirm-title">Confirm action</h3>
+            <p id="confirm-message">Are you sure?</p>
+            <label class="dont-ask"><input type="checkbox" id="dont-ask"> Do not ask me again for this action</label>
+            <div class="modal-buttons">
+                <button id="confirm-yes">Yes</button>
+                <button id="confirm-no">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

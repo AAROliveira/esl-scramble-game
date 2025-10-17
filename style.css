@@ -1,0 +1,238 @@
+/* Modern, clean styling for ESL Word Scramble */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(to right, #6dd5ed, #2193b0); /* Modern blue gradient */
+    color: #333;
+    overflow: hidden; /* Prevent scroll */
+}
+
+.game-container {
+    background: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    transform: translateY(0);
+    transition: transform 0.3s ease-in-out;
+}
+
+h1 {
+    color: #2193b0;
+    margin-bottom: 25px;
+    font-size: 2.5em;
+    letter-spacing: 1px;
+}
+
+.score-timer {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #555;
+}
+
+.word-display {
+    background: #e0f7fa; /* Light blue */
+    padding: 25px 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    font-size: 2.8em;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #00796b; /* Darker teal */
+    min-height: 1.5em; /* Ensure consistent height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#user-input {
+    width: calc(100% - 40px);
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 1.2em;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+#user-input:focus {
+    border-color: #2193b0;
+    outline: none;
+    box-shadow: 0 0 8px rgba(33, 147, 176, 0.3);
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Space between buttons */
+    margin-bottom: 25px;
+}
+
+.lifelines {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.lifeline {
+    background: #ff9800; /* orange */
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.95em;
+    max-width: 180px;
+}
+
+.lifeline .icon {
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.lifeline .label { vertical-align: middle; }
+
+/* Tooltip on hover (uses title attribute fallback) */
+.lifeline[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    transform: translateY(-40px);
+    white-space: nowrap;
+}
+
+/* Lifeline use animation */
+.lifeline-use {
+    animation: pop 420ms ease-out;
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+}
+
+/* Modal styles */
+.modal.hidden { display: none; }
+.modal { position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 9999; }
+.modal-backdrop { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); }
+.modal-content { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); background: #fff; padding: 20px; border-radius: 10px; width: 90%; max-width: 420px; box-shadow: 0 8px 30px rgba(0,0,0,0.25); text-align: left; }
+.modal-buttons { display:flex; justify-content:flex-end; gap:10px; margin-top:12px; }
+.modal .dont-ask { display:block; margin-top:8px; font-size:0.95em; }
+.modal button { padding:8px 14px; border-radius:6px; }
+.modal #confirm-yes { background:#4CAF50; color:#fff; border:none; }
+.modal #confirm-no { background:#ccc; border:none; }
+
+.lifeline-help {
+    width: 100%;
+    text-align: center;
+    font-size: 0.95em;
+    color: #666;
+    margin: 6px 0 0 0;
+}
+
+button {
+    background: #2193b0; /* Primary blue */
+    color: white;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    flex: 1; /* Allow buttons to grow */
+    max-width: 180px; /* Limit button width */
+}
+
+button:hover {
+    background-color: #1a7b97; /* Darker blue on hover */
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.start-button {
+    background-color: #4CAF50; /* Green for start */
+    font-size: 1.3em;
+    padding: 18px 30px;
+}
+
+.start-button:hover {
+    background-color: #45a049;
+}
+
+
+#feedback {
+    font-size: 1.1em;
+    font-weight: bold;
+    min-height: 1.5em; /* To prevent layout shift */
+}
+
+.correct {
+    color: #4CAF50; /* Green for correct */
+}
+
+.wrong {
+    color: #f44336; /* Red for wrong */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .game-container {
+        padding: 25px;
+        border-radius: 15px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .score-timer {
+        font-size: 1em;
+    }
+
+    .word-display {
+        font-size: 2em;
+        padding: 20px;
+    }
+
+    .buttons {
+        flex-direction: column; /* Stack buttons on small screens */
+        gap: 10px;
+    }
+
+    button, .start-button {
+        width: 100%;
+        max-width: none; /* Remove max-width for stacked buttons */
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+
+    .start-button {
+        font-size: 1.1em;
+        padding: 15px 25px;
+    }
+}
