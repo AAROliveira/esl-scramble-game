@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Available Variants - ESL Scramble</title>
+    <style>
+        body {
+            font-family: system-ui, Segoe UI, Roboto, Arial;
+            margin: 24px
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 900px
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left
+        }
+
+        th {
+            background: #f5f5f5
+        }
+
+        a {
+            color: #0366d6
+        }
+
+        .note {
+            color: #666;
+            font-size: 0.9rem
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Available Variants</h1>
+    <p class="note">This page reads <code>data/manifest.csv</code> to show available sets. If the manifest is missing,
+        create it with columns: <code>slug,name,description,file</code>.</p>
+    <div id="list">Loading...</div>
+
+    <script>
+        async function loadManifest() {
+            try {
+                const res = await fetch('data/manifest.csv');
+                if (!res.ok) throw new Error('manifest not found');
+                const txt = await res.text();
+                const lines = txt.split(/\r?\n/).filter(Boolean);
+                const header = lines.shift().split(',').map(h => h.trim().toLowerCase());
+                const rows = lines.map(l => {
+                    // naive CSV split — manifest is expected to be simple
+                    const cols = l.split(',');
+                    const obj = {};
+                    header.forEach((h, i) => obj[h] = (cols[i] || '').trim());
+                    return obj;
+                });
+                if (rows.length === 0) return document.getElementById('list').innerText = 'No variants found in manifest.';
+                const table = document.createElement('table');
+                const thead = document.createElement('thead');
+                thead.innerHTML = '<tr><th>Slug</th><th>Name</th><th>Description</th><th>Link</th></tr>';
+                table.appendChild(thead);
+                const tbody = document.createElement('tbody');
+                rows.forEach(r => {
+                    const tr = document.createElement('tr');
+                    const slug = r.slug || r.file || '';
+                    const name = r.name || slug;
+                    const desc = r.description || '';
+                    const link = `/` + `?set=${encodeURIComponent(slug)}`;
+                    tr.innerHTML = `<td>${slug}</td><td>${name}</td><td>${desc}</td><td><a href="${link}">Play</a></td>`;
+                    tbody.appendChild(tr);
+                });
+                table.appendChild(tbody);
+                const container = document.getElementById('list');
+                container.innerHTML = '';
+                container.appendChild(table);
+            } catch (e) {
+                document.getElementById('list').innerText = 'Could not load manifest: ' + e.message;
+            }
+        }
+        loadManifest();
+    </script>
+</body>
+
+</html>

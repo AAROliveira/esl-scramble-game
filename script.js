@@ -93,6 +93,27 @@ const countTimeSpan = document.getElementById('count-time');
 const countBreakSpan = document.getElementById('count-break');
 const lifelinesTotalSpan = document.getElementById('lifelines-total');
 
+// Word source may be replaced by loaded dataset
+let wordSource = words.slice();
+
+async function loadWordSet() {
+    const params = new URLSearchParams(window.location.search);
+    const setName = params.get('set'); // e.g. ?set=airport
+    if (!setName) return;
+    try {
+        const res = await fetch(`data/${setName}.json`);
+        if (!res.ok) throw new Error('Not found');
+        const json = await res.json();
+        if (Array.isArray(json.words) && json.words.length) {
+            // normalize words to uppercase
+            wordSource = json.words.map(w => ({ word: (w.word || '').toUpperCase(), hint: w.hint || '' }));
+            console.log('Loaded word set', setName, wordSource.length);
+        }
+    } catch (e) {
+        console.warn('Could not load dataset', setName, e);
+    }
+}
+
 // --- Helper Functions ---
 
 function scrambleWord(word) {
@@ -112,8 +133,8 @@ function scrambleWord(word) {
 }
 
 function selectRandomWord() {
-    const randomIndex = Math.floor(Math.random() * words.length);
-    currentWord = words[randomIndex];
+    const randomIndex = Math.floor(Math.random() * wordSource.length);
+    currentWord = wordSource[randomIndex];
     // Reset reducedScramble for the new word unless a break lifeline was just used
     // reducedScramble persists only for current word; set to false after producing scrambled variant
     const scrambled = scrambleWord(currentWord.word);
@@ -352,7 +373,8 @@ function animateLifelineUse(button) {
 }
 
 // --- Initial Setup ---
-window.onload = () => {
+window.onload = async () => {
+    await loadWordSet();
     disableGameControls(); // Disable controls until game starts
     startBtn.style.display = 'block'; // Ensure start button is visible
     scrambledWordDisplay.textContent = "Click 'Start Game'!";
