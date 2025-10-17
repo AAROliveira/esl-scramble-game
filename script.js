@@ -94,12 +94,13 @@ const countBreakSpan = document.getElementById('count-break');
 const lifelinesTotalSpan = document.getElementById('lifelines-total');
 
 // Word source may be replaced by loaded dataset
-let wordSource = words.slice();
+let wordSource = words.slice(); // Default set
 
 async function loadWordSet() {
     const params = new URLSearchParams(window.location.search);
     const setName = params.get('set'); // e.g. ?set=airport
     if (!setName) return;
+    wordSource = []; // Clear default set if a variant is requested
     try {
         const res = await fetch(`data/${setName}.json`);
         if (!res.ok) throw new Error('Not found');
@@ -108,8 +109,11 @@ async function loadWordSet() {
             // normalize words to uppercase
             wordSource = json.words.map(w => ({ word: (w.word || '').toUpperCase(), hint: w.hint || '' }));
             console.log('Loaded word set', setName, wordSource.length);
+        } else {
+            alert(`No words found in data/${setName}.json. Game cannot start.`);
         }
     } catch (e) {
+        alert(`Could not load dataset: data/${setName}.json. Game cannot start.`);
         console.warn('Could not load dataset', setName, e);
     }
 }
@@ -187,6 +191,11 @@ function disableGameControls(disable = true) {
 // --- Event Listeners ---
 
 startBtn.addEventListener('click', () => {
+    if (wordSource.length === 0) {
+        feedbackDisplay.textContent = "No words loaded. Please check your dataset or variant name.";
+        feedbackDisplay.className = 'wrong';
+        return;
+    }
     gameStarted = true;
     score = 0; // Reset score for a new game
     updateScore(0); // Update display
