@@ -94,7 +94,8 @@ const countBreakSpan = document.getElementById('count-break');
 const lifelinesTotalSpan = document.getElementById('lifelines-total');
 
 // Word source may be replaced by loaded dataset
-let wordSource = words.slice(); // Default set
+// No default vocabulary. Only loaded variants are used.
+let wordSource = [];
 
 async function loadWordSet() {
     const params = new URLSearchParams(window.location.search);
